@@ -12,7 +12,7 @@ AWSの実務経験はありませんが、Azureの構築経験(1年未満)があ
 ## **目次**
 | 項目 | 説明 |
 | :--- | :--- |
-| [プロフィール](https://github.com/Tomoyuki-Takeshita/Portfolio#プロフィール) | 簡単ですが、プロフィールになります。 |
+| [プロフィール](https://github.com/Tomoyuki-Takeshita/portfolio_repository#%E3%83%97%E3%83%AD%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB) | 簡単ですが、プロフィールになります。 |
 | [職務履歴書](https://github.com/Tomoyuki-Takeshita/portfolio_repository#%E8%81%B7%E5%8B%99%E5%B1%A5%E6%AD%B4%E6%9B%B8) | 職務履歴書になります。 |
 | [取得資格](https://github.com/Tomoyuki-Takeshita/Portfolio#取得資格) | 資格試験の取得状況です。現在はAWS SAP取得目指して勉強中です。 |
 | [制作物](https://github.com/Tomoyuki-Takeshita/Portfolio#制作物) | AWS CloudFormationとTerraformの紹介になります。 |
