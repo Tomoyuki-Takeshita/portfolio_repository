@@ -12,10 +12,17 @@
 ## **目次**
 | 項目 | 説明 |
 | :--- | :--- |
-| [取得資格](https://github.com/Tomoyuki-Takeshita/Portfolio#取得資格) | 資格試験の取得状況です。AWSが中心となります。 |
+| [職務履歴書](https://github.com/Tomoyuki-Takeshita/Portfolio#職務履歴書) | 職務履歴書になります。 |
+| [取得資格](https://github.com/Tomoyuki-Takeshita/Portfolio#取得資格) | 資格試験の取得状況です。現在はAWS SAP取得目指して勉強中です。 |
 | [制作物](https://github.com/Tomoyuki-Takeshita/Portfolio#制作物) | AWS CloudFormationとTerraformの紹介になります。 |
 
 ---
+
+## **職務履歴書**
+
+
+
+
 
 ## **取得資格**
 | 資格名 | 取得年月 |
