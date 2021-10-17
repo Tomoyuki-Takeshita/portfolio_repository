@@ -14,6 +14,7 @@ AWSの実務経験はありませんが、Azureの構築経験(1年未満)があ
 | :--- | :--- |
 | [プロフィール](https://github.com/Tomoyuki-Takeshita/portfolio_repository#%E3%83%97%E3%83%AD%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB) | 簡単ですが、プロフィールになります。 |
 | [職務履歴書](https://github.com/Tomoyuki-Takeshita/portfolio_repository#%E8%81%B7%E5%8B%99%E5%B1%A5%E6%AD%B4%E6%9B%B8) | 職務履歴書になります。 |
+| [学習内容]
 | [取得資格](https://github.com/Tomoyuki-Takeshita/portfolio_repository/blob/master/README.md#%E5%8F%96%E5%BE%97%E8%B3%87%E6%A0%BC) | 資格試験の取得状況です。現在はAWS SAP取得目指して勉強中です。 |
 | [制作物](https://github.com/Tomoyuki-Takeshita/portfolio_repository/blob/master/README.md#%E5%88%B6%E4%BD%9C%E7%89%A9) | AWS CloudFormationとTerraformの紹介になります。 |
 
@@ -42,6 +43,22 @@ AWSの実務経験はありませんが、Azureの構築経験(1年未満)があ
 
 ### **以下詳細**
 職務履歴書は[こちら](https://github.com/Tomoyuki-Takeshita/portfolio_repository/tree/master/職務履歴書)
+
+## **学習内容**
+・某AWSのオンラインスクールで学習しました。内容は以下になります。
+-Ruby on Railsの開発環境構築
+-簡単なRuby on Railsアプリの開発
+-ネットワーク関連リソース作成、EC2、RDS、ELB、S3の環境を構築
+-CloudFormationを使用したAWS環境のコード化 (YAML) 
+-環境設定をコード化するためにAnsibleを使用
+
+・その他学習した内容
+-Terraformを使用したAWS環境のコード化
+-AWSで独自ドメインのhttpsな静的Webサイト(簡単な)を構築(ACM+S3＋CloudFront+Route53）
+
+・資格勉強
+AWS ソリューションアーキテクト – アソシエイト 取得
+AWS ソリューションアーキテクト プロフェッショナル 勉強中
 
 ## **取得資格**
 | 資格名 | 取得年月 |
