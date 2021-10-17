@@ -42,7 +42,7 @@ AWSの実務経験はありませんが、Azureの構築経験(1年未満)があ
 2019年10月〜2022年3月 株式会社エーティエルシステムズ(個人契約)
 
 ### **以下詳細**
-職務履歴書は[こちら](https://github.com/Tomoyuki-Takeshita/portfolio_repository/tree/master/職務履歴書)
+職務履歴書は[こちら](https://github.com/Tomoyuki-Takeshita/portfolio_repository/blob/master/%E8%81%B7%E5%8B%99%E7%B5%8C%E6%AD%B4%E6%9B%B8.pdf)
 
 ## **学習内容**
 ・某AWSのオンラインスクールで学習しました。内容は以下になります。
