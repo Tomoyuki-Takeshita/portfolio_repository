@@ -45,20 +45,20 @@ AWSの実務経験はありませんが、Azureの構築経験(1年未満)があ
 職務履歴書は[こちら](https://github.com/Tomoyuki-Takeshita/portfolio_repository/blob/master/%E8%81%B7%E5%8B%99%E7%B5%8C%E6%AD%B4%E6%9B%B8.pdf)
 
 ## **学習内容**
-・某AWSのオンラインスクールで学習しました。内容は以下になります。
--Ruby on Railsの開発環境構築
--簡単なRuby on Railsアプリの開発
--ネットワーク関連リソース作成、EC2、RDS、ELB、S3の環境を構築
--CloudFormationを使用したAWS環境のコード化 (YAML) 
--環境設定をコード化するためにAnsibleを使用
+-某AWSのオンラインスクールで学習しました。内容は以下になります。
+ - -Ruby on Railsの開発環境構築
+ - -簡単なRuby on Railsアプリの開発
+ - -ネットワーク関連リソース作成、EC2、RDS、ELB、S3の環境を構築
+ - -CloudFormationを使用したAWS環境のコード化 (YAML) 
+ - -環境設定をコード化するためにAnsibleを使用
 
-・その他学習した内容
--Terraformを使用したAWS環境のコード化
--AWSで独自ドメインのhttpsな静的Webサイト(簡単な)を構築(ACM+S3＋CloudFront+Route53）
+-その他学習した内容
+ - -Terraformを使用したAWS環境のコード化
+ - -AWSで独自ドメインのhttpsな静的Webサイト(簡単な)を構築(ACM+S3＋CloudFront+Route53）
 
-・資格勉強
-AWS ソリューションアーキテクト – アソシエイト 取得
-AWS ソリューションアーキテクト プロフェッショナル 勉強中
+-資格勉強
+ - AWS ソリューションアーキテクト – アソシエイト 取得
+ - AWS ソリューションアーキテクト プロフェッショナル 勉強中
 
 ## **取得資格**
 | 資格名 | 取得年月 |
