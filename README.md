@@ -13,7 +13,6 @@ AWSの実務経験はありませんが、Azureの構築経験(1年未満)があ
 | 項目 | 説明 |
 | :--- | :--- |
 | [プロフィール](https://github.com/Tomoyuki-Takeshita/portfolio_repository#%E3%83%97%E3%83%AD%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB) | 簡単ですが、プロフィールになります。 |
-| [職務履歴書](https://github.com/Tomoyuki-Takeshita/portfolio_repository#%E8%81%B7%E5%8B%99%E5%B1%A5%E6%AD%B4%E6%9B%B8) | 職務履歴書になります。 |
 | [学習内容](https://github.com/Tomoyuki-Takeshita/portfolio_repository/blob/master/README.md#%E5%AD%A6%E7%BF%92%E5%86%85%E5%AE%B9) | AWSの学習内容になります。 |
 | [取得資格](https://github.com/Tomoyuki-Takeshita/portfolio_repository/blob/master/README.md#%E5%8F%96%E5%BE%97%E8%B3%87%E6%A0%BC) | 資格試験の取得状況です。現在はAWS SAP取得目指して勉強中です。 |
 | [制作物](https://github.com/Tomoyuki-Takeshita/portfolio_repository/blob/master/README.md#%E5%88%B6%E4%BD%9C%E7%89%A9) | AWS CloudFormationとTerraformの紹介になります。 |
@@ -29,20 +28,6 @@ AWSの実務経験はありませんが、Azureの構築経験(1年未満)があ
 浜松市(29年)→東京都(半年)→甲府市(3年3か月)
 
 製造業(6年)、ネットワークエンジニア(3年3か月)
-
-
-## **職務履歴書**
-### **職務要約**
-2007年4月～2008年9月 遠州紙工業株式会社(正社員)
-
-2012年6月～2017年6月 日本形染株式会社(正社員)
-
-2018年7月～2019年9月 株式会社テクノプロ テクノプロ・エンジニアリング(正社員)
-
-2019年10月〜2022年3月 株式会社エーティエルシステムズ(個人契約)
-
-### **以下詳細**
-職務履歴書は[こちら](https://github.com/Tomoyuki-Takeshita/portfolio_repository/blob/master/%E8%81%B7%E5%8B%99%E7%B5%8C%E6%AD%B4%E6%9B%B8.pdf)
 
 ## **学習内容**
 ### **某AWSのオンラインスクールで学習しました。内容は以下になります。**
