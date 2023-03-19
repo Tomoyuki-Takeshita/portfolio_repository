@@ -1,0 +1,93 @@
+AWSTemplateFormatVersion: "2010-09-09" 
+
+Description: RDS for MySQL Create
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Project Name Prefix
+        Parameters: 
+          - ProjectPrefix 
+      - Label:
+          default: RDS Configuration
+        Parameters: 
+          - DBInstanceName
+          - DBName
+
+Parameters:
+  ProjectPrefix: 
+    Type: String
+  DBInstanceName: 
+    Type: String 
+  DBName:
+    Type: String
+
+Resources: 
+  # RDS
+  RDS:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      Engine: mysql
+      EngineVersion: 8.0.20
+      DBInstanceIdentifier: !Sub ${ProjectPrefix}-${DBInstanceName} 
+      DBInstanceClass: db.t2.micro  
+      AllocatedStorage: 20 
+      StorageType: gp2 
+      DBName: !Ref DBName
+      MasterUsername: '{{resolve:secretsmanager:MyRDSSecret:SecretString:username}}'
+      MasterUserPassword: '{{resolve:secretsmanager:MyRDSSecret:SecretString:password}}'
+      DBSubnetGroupName: !Ref RdsSubnetGroup
+      PubliclyAccessible: false 
+      MultiAZ: false 
+      MonitoringInterval: 0
+      AutoMinorVersionUpgrade: true
+      AllowMajorVersionUpgrade: false 
+      DBParameterGroupName: custom-parameter-group-mysql80 
+      OptionGroupName: custom-option-group-mysql80 
+      VPCSecurityGroups: 
+        - !Ref RdsSg
+      Port: 3306 
+      CopyTagsToSnapshot: false
+      BackupRetentionPeriod: 1 
+      Tags:
+        - Key: Name
+          Value: DBInstanceName
+    DeletionPolicy: Delete 
+  
+  # RDSセキュリティグループ
+  RdsSg:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub ${ProjectPrefix}-private-sg
+      GroupDescription: This Security Group is for RdsSg
+      VpcId: { "Fn::ImportValue": !Sub "${ProjectPrefix}-vpc" }
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectPrefix}-rds-sg
+  RdsSgIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref RdsSg
+      IpProtocol: tcp
+      FromPort: 3306
+      ToPort: 3306
+      SourceSecurityGroupId: { "Fn::ImportValue": !Sub "${ProjectPrefix}-ec2-sg" }
+  RdsSgEgress:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      GroupId: !Ref RdsSg
+      IpProtocol: -1
+      CidrIp: 0.0.0.0/0
+
+  # RDSサブネットグループ
+  RdsSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: This DBsubnet Group is for RdsSubnetGroup
+      SubnetIds:
+        - { "Fn::ImportValue": !Sub "${ProjectPrefix}-private1a" }
+        - { "Fn::ImportValue": !Sub "${ProjectPrefix}-private1c" }
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectPrefix}-rds-SubnetGroup-1a1c

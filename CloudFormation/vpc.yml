@@ -1,0 +1,166 @@
+AWSTemplateFormatVersion: "2010-09-09" 
+
+Description: VPC and Subnet Create 
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups: 
+      - Label:
+          default: Project Name Prefix 
+        Parameters: 
+          - ProjectPrefix 
+
+Parameters: 
+  ProjectPrefix: 
+    Type: String
+    
+Resources: 
+  # VPC
+  VPC: 
+    Type: AWS::EC2::VPC 
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true 
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectPrefix}-vpc
+
+  # インターネットゲートウェイ
+  Igw:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectPrefix}-igw
+  
+  # インターネットゲートウェイのアタッチ
+  IgwAttach:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref Igw
+
+  # パブリックサブネット1a
+  Public1a:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1a
+      CidrBlock: 10.0.0.0/24
+      VpcId: !Ref VPC 
+      MapPublicIpOnLaunch: true 
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectPrefix}-public1a
+  
+  # パブリックサブネット1c
+  Public1c:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1c
+      CidrBlock: 10.0.1.0/24
+      VpcId: !Ref VPC
+      MapPublicIpOnLaunch: true 
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectPrefix}-public1c
+
+  # プライベートサブネット1a
+  Private1a:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1a
+      CidrBlock: 10.0.2.0/24
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectPrefix}-private1a
+
+  # プライベートサブネット1c
+  Private1c:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1c
+      CidrBlock: 10.0.3.0/24
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectPrefix}-private1c
+
+  # パブリックルートテーブル
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectPrefix}-public-RouteTable
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref Igw
+  
+  # プライベートルートテーブル
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectPrefix}-private-RouteTable
+
+  # パブリックルートテーブルの関連付け
+  Public1aRouteTable:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref Public1a
+      RouteTableId: !Ref PublicRouteTable
+
+  Public1cRouteTable:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref Public1c
+      RouteTableId: !Ref PublicRouteTable
+
+  # プライベートルートテーブルの関連付け
+  Private1aRouteTable:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref Private1a
+      RouteTableId: !Ref PrivateRouteTable
+
+  Private1cRouteTable:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref Private1c
+      RouteTableId: !Ref PrivateRouteTable
+
+# 出力パラメータ
+Outputs:
+  VPC:
+    Value: !Ref VPC
+    Export:
+      Name: !Sub ${ProjectPrefix}-vpc
+
+  Public1a:
+    Value: !Ref Public1a
+    Export:
+      Name: !Sub ${ProjectPrefix}-public1a
+
+  Public1c:
+    Value: !Ref Public1c
+    Export:
+      Name: !Sub ${ProjectPrefix}-public1c
+
+  Private1a:
+    Value: !Ref Private1a
+    Export:
+      Name: !Sub ${ProjectPrefix}-private1a
+
+  Private1c:
+    Value: !Ref Private1c
+    Export:
+      Name: !Sub ${ProjectPrefix}-private1c

@@ -1,0 +1,216 @@
+AWSTemplateFormatVersion: "2010-09-09" 
+
+Description: EC2 and ALB Create
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups: 
+      - Label:
+          default: Project Name Prefix 
+        Parameters: 
+          - ProjectPrefix 
+
+Parameters: 
+  ProjectPrefix: 
+    Type: String
+
+Resources: 
+  # EC2(1a)
+  EC2Public1a:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-06098fd00463352b6
+      InstanceType: t2.micro
+      AvailabilityZone: ap-northeast-1a
+      InstanceInitiatedShutdownBehavior: stop 
+      DisableApiTermination: false
+      Monitoring: false
+      IamInstanceProfile: !Ref InstanceProfile
+      KeyName: win02-key
+      SubnetId: { "Fn::ImportValue": !Sub "${ProjectPrefix}-public1a" }
+      SecurityGroupIds:  
+        - !Ref Ec2Sg
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectPrefix}-server1a
+    
+  # EC2(1c)
+  EC2Public1c:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-06098fd00463352b6
+      InstanceType: t2.micro
+      AvailabilityZone: ap-northeast-1c
+      InstanceInitiatedShutdownBehavior: stop 
+      DisableApiTermination: false
+      Monitoring: false 
+      IamInstanceProfile: !Ref InstanceProfile
+      KeyName: win02-key
+      SubnetId: { "Fn::ImportValue": !Sub "${ProjectPrefix}-public1c" }
+      SecurityGroupIds: 
+        - !Ref Ec2Sg
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectPrefix}-server1c
+  
+  # 静的IPの関連付け(EC2(1a))
+  ElasticIPAssociate:
+    Type: AWS::EC2::EIPAssociation
+    Properties: 
+      InstanceId: !Ref EC2Public1a
+      EIP: 18.178.65.247
+
+  # 静的IPの関連付け(EC2(1c))
+  ElasticIPAssociate:
+    Type: AWS::EC2::EIPAssociation
+    Properties: 
+      InstanceId: !Ref EC2Public1c
+      EIP: 35.73.229.77
+
+  # ALBセキュリティグループ
+  AlbSg:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub ${ProjectPrefix}-alb-sg
+      GroupDescription: This Security Group is for AlbSg
+      VpcId: { "Fn::ImportValue": !Sub "${ProjectPrefix}-vpc" }
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectPrefix}-alb-sg
+  AlbSgIngressHttp:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref AlbSg
+      IpProtocol: tcp
+      FromPort: 80
+      ToPort: 80
+      CidrIp: 0.0.0.0/0
+  AlbSgIngressHttps:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref AlbSg
+      IpProtocol: tcp
+      FromPort: 443
+      ToPort: 443
+      CidrIp: 0.0.0.0/0
+  AlbSgEgress:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      GroupId: !Ref AlbSg
+      IpProtocol: -1
+      CidrIp: 0.0.0.0/0
+
+  # EC2セキュリティグループ
+  Ec2Sg:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub ${ProjectPrefix}-ec2-sg
+      GroupDescription: This Security Group is for Ec2Sg
+      VpcId: { "Fn::ImportValue": !Sub "${ProjectPrefix}-vpc" }
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectPrefix}-ec2-sg
+  Ec2SgIngressHttp:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref Ec2Sg
+      IpProtocol: tcp
+      FromPort: 80
+      ToPort: 80
+      SourceSecurityGroupId: !Ref AlbSg
+  Ec2SgEgress:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      GroupId: !Ref Ec2Sg
+      IpProtocol: -1
+      CidrIp: 0.0.0.0/0
+
+  ## SSH接続用 IAMロール(AWS Systems Manager)
+  # インスタンスプロファイルの定義
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+        - !Ref SsmRole
+
+  # IAMロール
+  SsmRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      RoleName: EC2_ssm_role
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  # ロードバランサーのターゲットグループ
+  AlbTargetGroup: 
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties: 
+      VpcId: { "Fn::ImportValue": !Sub "${ProjectPrefix}-vpc" }
+      Name: !Sub ${ProjectPrefix}-tg
+      Protocol: HTTP 
+      Port: 80 
+      HealthCheckProtocol: HTTP 
+      HealthCheckPath: / 
+      HealthCheckPort: traffic-port
+      HealthyThresholdCount: 5
+      UnhealthyThresholdCount: 2
+      HealthCheckTimeoutSeconds: 5 
+      HealthCheckIntervalSeconds: 30
+      Matcher: 
+        HttpCode: 200 
+      Tags: 
+        - Key: Name
+          Value: !Sub ${ProjectPrefix}-tg
+      Targets: 
+        - Id: !Ref EC2Public1a 
+        - Id: !Ref EC2Public1c
+          Port: 80 
+
+  # アプリケーションロードバランサー
+  ALB: 
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer 
+    Properties: 
+      Name: !Sub ${ProjectPrefix}-alb
+      Tags: 
+        - Key: Name
+          Value: !Sub ${ProjectPrefix}-alb
+      Scheme: internet-facing 
+      LoadBalancerAttributes:  
+        - Key: deletion_protection.enabled 
+          Value: false
+        - Key: idle_timeout.timeout_seconds
+          Value: 60
+      SecurityGroups:
+        - !Ref AlbSg
+      Subnets: 
+        - { "Fn::ImportValue": !Sub "${ProjectPrefix}-public1a" }
+        - { "Fn::ImportValue": !Sub "${ProjectPrefix}-public1c" }
+  
+  # リスナー
+  AlbListener: 
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties: 
+      DefaultActions: 
+        - TargetGroupArn: !Ref AlbTargetGroup
+          Type: forward
+      LoadBalancerArn: !Ref ALB  
+      Port: 80  
+      Protocol: HTTP 
+
+# 出力パラメータ
+Outputs:
+  Ec2Sg:
+    Value: !Ref Ec2Sg
+    Export:
+      Name: !Sub ${ProjectPrefix}-ec2-sg
